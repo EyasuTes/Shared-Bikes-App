@@ -8,7 +8,10 @@ The reusable ETL code is separated by responsibility:
 - `run_etl.py` calls those three stages in order for a manual end-to-end run.
 - `fetch_capital_bikeshare.py` remains a small extraction-only diagnostic command.
 
-Airflow, Kafka, and the web application do not call these stages yet.
+Airflow orchestrates these reusable stages as separate tasks. The Kafka station
+producer reuses the GBFS extraction and transformation logic for its live
+events, while the web application reads the resulting PostgreSQL data through
+the Express API.
 
 From the `my-app` folder, run:
 
