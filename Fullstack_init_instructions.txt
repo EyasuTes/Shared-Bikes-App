@@ -1,0 +1,77 @@
+Backend
+
+
+mkdir my-app && cd my-app
+mkdir server && cd server
+npm init -y
+npm install express
+
+const express = require('express');
+const app = express();
+const PORT = 5000;
+
+app.get('/api', (req, res) => {
+  res.json({ message: "Hello from Express!" });
+});
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+
+Frontend
+
+
+
+npm create vite@latest client -- --template react
+cd client
+npm install
+
+//vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': 'http://localhost:5000'
+    }
+  }
+})
+
+
+Fullstack Start
+
+/outside my-app
+npm init -y
+npm install concurrently --save-dev //to start both frontend and Backend
+"scripts": {
+  "server": "node server/index.js",
+  "client": "npm run dev --prefix client",
+  "dev": "concurrently \"npm run server\" \"npm run client\""
+}
+
+//simple frontend app
+import { useEffect, useState } from 'react';
+
+function App() {
+  const [message, setMessage] = useState('Loading...');
+
+  useEffect(() => {
+    // Fetches from http://localhost:5000/api via the Vite proxy
+    fetch('/api')
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message))
+      .catch((err) => setMessage('Connection failed!'));
+  }, []);
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>Front-End / Back-End Connection Test</h1>
+      <p>Message from server: <strong>{message}</strong></p>
+    </div>
+  );
+}
+
+export default App;
+

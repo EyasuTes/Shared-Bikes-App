@@ -1,0 +1,8 @@
+.env
+node_modules/
+client/node_modules/
+client/dist/
+server/node_modules/
+outputs/
+__pycache__/
+*.py[cod]

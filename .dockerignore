@@ -1,0 +1,10 @@
+.env
+.git
+**/__pycache__/
+**/*.pyc
+**/node_modules/
+client/
+server/
+database/
+pipeline/tests/
+streaming/tests/
