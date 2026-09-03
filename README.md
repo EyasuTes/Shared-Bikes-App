@@ -140,7 +140,6 @@ this configuration directly to the internet.
 | `pipeline/extract.py` | Discovers and downloads the current GBFS feeds |
 | `pipeline/transform.py` | Cleans timestamps, flags, coordinates, and counts |
 | `pipeline/load.py` | Writes raw and cleaned records to PostgreSQL |
-| `pipeline/run_etl.py` | Runs extract, transform, and load in order |
 | `pipeline/artifacts.py` | Manages temporary Airflow task artifacts |
 
 The pipeline retrieves:
@@ -281,18 +280,14 @@ docker compose down
 docker compose restart server
 ```
 
-## Run the ETL manually
+## Run the ETL on demand
 
-Airflow normally handles this, but it can also run from the host:
+Start PostgreSQL and Airflow, then trigger the DAG from the Airflow container:
 
 ```bash
-docker compose up -d db db-schema
-python -m pip install -r pipeline/requirements.txt
-python -m pipeline.run_etl
+docker compose up -d db db-schema airflow
+docker compose exec airflow airflow dags trigger capital_bikeshare_etl
 ```
-
-The runner reads `.env` and connects through the configured PostgreSQL host
-port. A `DATABASE_URL` environment variable overrides the file values.
 
 ## Tests
 
